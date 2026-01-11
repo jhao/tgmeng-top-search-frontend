@@ -67,7 +67,7 @@ import FishModeChoose from "@/components/fakeUI/FishModeChoose.vue";
 import HotPointHistoryComponent from "@/components/Layout/HotPointHistoryComponent.vue";
 import HotPointComponentSudden from "@/components/Layout/HotPointComponentSudden.vue";
 import HotPointComponentNormal from "@/components/Layout/HotPointComponentNormal.vue";
-import PageViewShow from "@/components/Layout/PageViewShow.vue";
+// import PageViewShow from "@/components/Layout/PageViewShow.vue";
 import SettingsPanel from "@/components/Layout/SettingsPanel.vue";
 import CategoryNavigation from "@/components/Layout/CategoryNavigation.vue";
 import HotPointComponentAI from "@/components/Layout/HotPointComponentAI.vue";
@@ -92,7 +92,7 @@ export default {
     WorkMaskExcel,
     WordCloud,
     FishModeChoose,
-    PageViewShow,
+    // PageViewShow,
     SettingsPanel,
   },
   data() {
