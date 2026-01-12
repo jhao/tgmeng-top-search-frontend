@@ -60,7 +60,7 @@ const dataMap = {
             "/media/baiduwenyu": {title: "糖果梦热榜 · 媒体 · 百度文娱百度文娱百度文娱", description: "糖果梦热榜 · 媒体 · 百度文娱", link: "https://trendapi.tgmeng.com/api/topsearch/baiduwenyu",platform: "百度文娱"},
 
             "/media/shaoshupai": {title: "糖果梦热榜 · 媒体 · 少数派", description: "糖果梦热榜 · 媒体 · 少数派", link: "https://trendapi.tgmeng.com/api/topsearch/shaoshupai",platform: "少数派"},
-            "/media/regengbaidu": {title: "糖果梦热榜 · 媒体 · 热梗", description: "糖果梦热榜 · 媒体 · 热梗", link: "https://trendapi.tgmeng.com/api/topsearch/baidu/regeng",regengbaidu: "百度热梗"},
+            "/media/regengbaidu": {title: "糖果梦热榜 · 媒体 · 热梗", description: "糖果梦热榜 · 媒体 · 热梗", link: "https://trendapi.tgmeng.com/api/topsearch/baidu/regeng",platform: "百度热梗"},
             "/media/minshengbaidu": {title: "糖果梦热榜 · 媒体 · 民生", description: "糖果梦热榜 · 媒体 · 民生", link: "https://trendapi.tgmeng.com/api/topsearch/baiduminsheng",platform: "百度民生"},
             "/media/qichebaidu": {title: "糖果梦热榜 · 媒体 · 汽车", description: "糖果梦热榜 · 媒体 · 汽车", link: "https://trendapi.tgmeng.com/api/topsearch/baidu/qiche",platform: "百度汽车"},
             "/media/xiaoshuobaidu": {title: "糖果梦热榜 · 媒体 · 小说", description: "糖果梦热榜 · 媒体 · 小说", link: "https://trendapi.tgmeng.com/api/topsearch/baidu/xiaoshuo",platform: "百度小说"},
