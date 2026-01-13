@@ -29,17 +29,17 @@
             >
               <h1><span class="dark:text-dark-text" :style="categroiesTitleStyle">{{ cat.name }}</span></h1>
             </button>
-            <svg xmlns="http://www.w3.org/2000/svg"
-                 viewBox="0 0 24 24"
-                 class="absolute top-0 right-0 cursor-pointer z-10 rounded-tr-xl overflow-hidden w-3.5 h-3.5 opacity-50"
-                 @click.stop="handleRssClick(cat)"
-                 v-if="cat.id !== 13 && cat.id !== -1 && categroiesRssIconShow && !(isAIMode && isHiddenCategory(cat))"
-            >
-              <rect width="24" height="24" rx="3" ry="3" fill="#FFA500"/>
-              <circle cx="6" cy="18" r="2" fill="white"/>
-              <path d="M4 4c9.941 0 18 8.059 18 18" stroke="white" stroke-width="2" fill="none"/>
-              <path d="M4 10c6.627 0 12 5.373 12 12" stroke="white" stroke-width="2" fill="none"/>
-            </svg>
+<!--            <svg xmlns="http://www.w3.org/2000/svg"-->
+<!--                 viewBox="0 0 24 24"-->
+<!--                 class="absolute top-0 right-0 cursor-pointer z-10 rounded-tr-xl overflow-hidden w-3.5 h-3.5 opacity-50"-->
+<!--                 @click.stop="handleRssClick(cat)"-->
+<!--                 v-if="cat.id !== 13 && cat.id !== -1 && categroiesRssIconShow && !(isAIMode && isHiddenCategory(cat))"-->
+<!--            >-->
+<!--              <rect width="24" height="24" rx="3" ry="3" fill="#FFA500"/>-->
+<!--              <circle cx="6" cy="18" r="2" fill="white"/>-->
+<!--              <path d="M4 4c9.941 0 18 8.059 18 18" stroke="white" stroke-width="2" fill="none"/>-->
+<!--              <path d="M4 10c6.627 0 12 5.373 12 12" stroke="white" stroke-width="2" fill="none"/>-->
+<!--            </svg>-->
           </div>
         </template>
       </draggable>
