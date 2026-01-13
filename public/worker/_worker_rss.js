@@ -19,27 +19,69 @@ export default function generateRSS(key) {
         logo: "",
         children: dataMap
     } : findNode(dataMap, key);
-    if (!info) return `<?xml version="1.0"?><rss></rss>`;
+
+    if (!info) {
+        return Promise.resolve(`<?xml version="1.0"?><rss></rss>`);
+    }
 
     function fetchData(node) {
         if (node.link) {
-            return fetch(node.link)
-                .then(res => res.text())
-                .then(text => {
-                    console.log("=== 接口原始返回 ===");
-                    console.log(text); // 看前 500 个字符
+            console.log('🌐 请求:', node.link);
 
-                    // 再尝试解析 JSON（不成功就进 catch）
-                    return JSON.parse(text);
+            // ✅ 添加完整的浏览器请求头
+            return fetch(node.link, {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36',
+                    'Accept': 'application/json, text/plain, */*',
+                    'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+                    'Accept-Encoding': 'gzip, deflate, br',
+                    'Referer': 'https://tgmeng.com/',
+                    'Origin': 'https://tgmeng.com',
+                    'X-Custom-Source': 'tgmeng-rss-worker',  // ✅ 自定义标识
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
+            })
+                .then(res => {
+                    console.log('  → 状态:', res.status, res.statusText);
+
+                    // ✅ 检查是否被 Cloudflare 拦截
+                    const contentType = res.headers.get('content-type') || '';
+
+                    if (res.status === 403 || contentType.includes('text/html')) {
+                        return res.text().then(html => {
+                            if (html.includes('Cloudflare') && html.includes('blocked')) {
+                                console.error('❌ 被 Cloudflare 拦截！');
+                                console.error('请在 Cloudflare Dashboard 中添加 WAF 规则白名单');
+                                throw new Error('Cloudflare blocked: 请配置 WAF 白名单');
+                            }
+                            console.error('❌ 返回了 HTML 而不是 JSON:', html.substring(0, 200));
+                            throw new Error(`Expected JSON but got HTML`);
+                        });
+                    }
+
+                    if (!res.ok) {
+                        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+                    }
+
+                    return res.json();
                 })
-                // .then(res => res.json())
-                .then(json => (json.data?.dataInfo || []).map(item => {
-                    const pubDate = json.data?.dataUpdateTime ? new Date(json.data.dataUpdateTime).toUTCString() : new Date().toUTCString();
-                    const platform = node.platform || '';
-                    return {...item, pubDate, platform};
-                }))
+                .then(json => {
+                    console.log('  ✓ 成功获取 JSON 数据');
+
+                    const items = (json.data?.dataInfo || []).map(item => {
+                        const pubDate = json.data?.dataUpdateTime
+                            ? new Date(json.data.dataUpdateTime).toUTCString()
+                            : new Date().toUTCString();
+                        const platform = node.platform || '';
+                        return {...item, pubDate, platform};
+                    });
+
+                    console.log('  ✓ 解析得到', items.length, '条数据');
+                    return items;
+                })
                 .catch(err => {
-                    console.error("获取数据失败:", err);
+                    console.error(`❌ 获取失败 [${node.platform}]:`, err.message);
                     return [];
                 });
         } else if (node.children) {
@@ -55,7 +97,7 @@ export default function generateRSS(key) {
         if (useCdata) {
             return '<![CDATA[' + String(str).replace(/]]>/g, ']]]]><![CDATA[>') + ']]>';
         }
-        return str.replace(/&/g, '&amp;')
+        return String(str).replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;')
@@ -63,19 +105,12 @@ export default function generateRSS(key) {
     }
 
     return fetchData(info).then(dataInfo => {
-        console.log('=== 调试信息 ===');
-        console.log('dataInfo 类型:', typeof dataInfo);
-        console.log('dataInfo 是数组吗:', Array.isArray(dataInfo));
-        console.log('dataInfo 长度:', dataInfo?.length);
-        console.log('dataInfo 内容:', JSON.stringify(dataInfo, null, 2));
+        console.log('📊 最终数据:', dataInfo.length, '条');
 
-        // 如果有数据，检查第一条
-        if (dataInfo.length > 0) {
-            console.log('第一条数据:', dataInfo[0]);
-            console.log('  - title:', dataInfo[0].title);
-            console.log('  - url:', dataInfo[0].url);
-            console.log('  - platform:', dataInfo[0].platform);
+        if (dataInfo.length === 0) {
+            console.warn('⚠️ 没有数据！可能是 API 被拦截或返回空数据');
         }
+
         function generateItemXml(item) {
             const title = escapeXml(item.title || '无标题', true);
             const link = escapeXml(item.url || '', false);
@@ -83,7 +118,7 @@ export default function generateRSS(key) {
             const platform = escapeXml(item.platform || '', true);
             const pubDate = item.pubDate || new Date().toUTCString();
             return `<item>
-            <title>${title}  -来自【${platform}】</title>
+            <title>${title} - 来自【${platform}】</title>
             <link>${link}</link>
             <description>${description}</description>
             <pubDate>${pubDate}</pubDate>
@@ -91,9 +126,7 @@ export default function generateRSS(key) {
         </item>`;
         }
 
-        const itemsXml = dataInfo.map(generateItemXml).join('');
-
-        // lastBuildDate 使用所有 item 中最新的 pubDate
+        const itemsXml = dataInfo.map(generateItemXml).join('\n            ');
         const lastBuildDate = dataInfo.length ? dataInfo.reduce((latest, item) => {
             const t = new Date(item.pubDate).getTime();
             return t > latest ? t : latest;
@@ -123,7 +156,7 @@ export default function generateRSS(key) {
         </channel>
         </rss>`;
 
+        console.log('✅ RSS 生成完成:', rssXml.length, '字节');
         return rssXml;
     });
-
 }
