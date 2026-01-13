@@ -53,15 +53,23 @@
 
               <div class="chart-tabs">
                 <div class="tab-buttons">
-                  <button
+                  <div
                       v-for="tab in tabConfigs"
                       :key="tab.mode"
-                      class="tab-btn"
-                      :class="{ active: currentSearchMode === tab.mode }"
-                      @click="loading ? null : clickTab(tab.mode)"
+                      class="tab-tooltip-wrapper"
                   >
-                    {{ tab.label }}
-                  </button>
+                    <button
+                        class="tab-btn"
+                        :class="{ active: currentSearchMode === tab.mode }"
+                        @click="loading ? null : clickTab(tab.mode)"
+                    >
+                      {{ tab.label }}
+                    </button>
+
+                    <div class="tab-tooltip">
+                      {{ tab.tip }}
+                    </div>
+                  </div>
                 </div>
                 <div class="tab-content">
                   <div class="chart-container">
@@ -224,11 +232,11 @@ export default {
       sortDir: 'desc',
       windowWidth: 0,
       tabConfigs: [
-        {label: '1分钟走势(精确)', mode: 'MO_HU_PI_PEI_ONE_MINUTES', isHistory: false, isMohu: true},
-        {label: '今日走势(精确)', mode: 'MO_HU_PI_PEI_TODAY', isHistory: false, isMohu: true},
-        {label: '历史走势(精确)', mode: 'MO_HU_PI_PEI_HISTORY', isHistory: true, isMohu: true},
-        {label: '今日走势(指纹)', mode: 'ZHI_WEN_PI_PEI_TODAY', isHistory: false, isMohu: false},
-        {label: '历史走势(指纹)', mode: 'ZHI_WEN_PI_PEI_HISTORY', isHistory: true, isMohu: false}
+        {label: '1分钟走势(精确)', mode: 'MO_HU_PI_PEI_ONE_MINUTES', isHistory: false, isMohu: true, tip: '新闻标题完整包含你的输入（建议输入短内容）'},
+        {label: '今日走势(精确)', mode: 'MO_HU_PI_PEI_TODAY', isHistory: false, isMohu: true, tip: '新闻标题完整包含你的输入（建议输入短内容）'},
+        {label: '历史走势(精确)', mode: 'MO_HU_PI_PEI_HISTORY', isHistory: true, isMohu: true, tip: '新闻标题完整包含你的输入（建议输入短内容）'},
+        {label: '今日走势(指纹)', mode: 'ZHI_WEN_PI_PEI_TODAY', isHistory: false, isMohu: false, tip: '新闻标题与你的输入语义相似（建议输入长内容）'},
+        {label: '历史走势(指纹)', mode: 'ZHI_WEN_PI_PEI_HISTORY', isHistory: true, isMohu: false, tip: '新闻标题与你的输入语义相似（建议输入长内容）'}
       ],
       echartsDates: [],
       echartsDataCounts: []
@@ -456,11 +464,11 @@ export default {
       let counts = []
 
       if (this.currentSearchMode === 'MO_HU_PI_PEI_ONE_MINUTES') {
-        ({ dates, counts } = this.buildMinuteData())
+        ({dates, counts} = this.buildMinuteData())
       } else if (this.currentSearchMode.includes('TODAY')) {
-        ({ dates, counts } = this.buildTodayHourData())
+        ({dates, counts} = this.buildTodayHourData())
       } else if (this.currentSearchMode.includes('HISTORY')) {
-        ({ dates, counts } = this.buildHistoryDayData())
+        ({dates, counts} = this.buildHistoryDayData())
       }
       this.echartsDates = dates
       this.echartsDataCounts = counts
@@ -484,7 +492,7 @@ export default {
       }
     },
     buildTodayHourData() {
-      const hours = Array.from({ length: 24 }, (_, i) =>
+      const hours = Array.from({length: 24}, (_, i) =>
           String(i).padStart(2, '0') + ':00'
       )
 
@@ -1319,4 +1327,47 @@ button:disabled:hover,
 .close-btn-footer:disabled:hover {
   transform: none !important;
 }
+
+.tab-tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tab-tooltip {
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  background: rgba(20, 23, 32, 0.95);
+  color: #e6edf3;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(64, 158, 255, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s ease;
+  z-index: 50;
+}
+
+/* 小箭头 */
+.tab-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: rgba(20, 23, 32, 0.95) transparent transparent transparent;
+}
+
+/* hover 显示 */
+.tab-tooltip-wrapper:hover .tab-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 </style>
