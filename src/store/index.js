@@ -1005,6 +1005,7 @@ export default createStore({
             { id: 15, name: '三上悠亚', avatar: require('@/assets/avatars/project/tylr.png'), amount: 5, message: '无', time: '2026-01-08 15:27' },
             { id: 15, name: '伍俊道', avatar: require('@/assets/avatars/project/wujundao.png'), amount: 8.88, message: '活下去，大佬！', time: '2026-01-11 19:40' },
             { id: 15, name: '👾', avatar: require('@/assets/avatars/project/v1894764.png'), amount: 6.6, message: '无', time: '2026-01-14 16:23' },
+            { id: 15, name: '吃⃰货⃰', avatar: require('@/assets/avatars/project/chihuo.png'), amount: 50, message: '喜欢这个网站，支持你。', time: '2026-01-14 22:42' },
         ]
 
     },
