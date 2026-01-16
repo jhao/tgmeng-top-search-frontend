@@ -26,17 +26,17 @@
           <span class="text-xs px-2 py-1 rounded-md text-gray-600 dark:text-gray-300 bg-gray-200 dark:bg-gray-700">
             🤖 更新时间: <span class="font-medium">{{ aiData.time }}</span>
           </span>&nbsp;
-          <span class="text-xs px-2 py-1 rounded-md text-gray-600 dark:text-gray-300 bg-gray-200 dark:bg-gray-700">
-            🤖 算力平台: <span class="font-medium">{{ aiData.platform }}</span>
-          </span>&nbsp;
-          <span class="text-xs px-2 py-1 rounded-md text-gray-600 dark:text-gray-300 bg-gray-200 dark:bg-gray-700">
-            🤖 AI模型: <span class="font-medium">{{ aiData.model }}</span>
-          </span>&nbsp;
+<!--          <span class="text-xs px-2 py-1 rounded-md text-gray-600 dark:text-gray-300 bg-gray-200 dark:bg-gray-700">-->
+<!--            🤖 算力平台: <span class="font-medium">{{ aiData.platform }}</span>-->
+<!--          </span>&nbsp;-->
+<!--          <span class="text-xs px-2 py-1 rounded-md text-gray-600 dark:text-gray-300 bg-gray-200 dark:bg-gray-700">-->
+<!--            🤖 AI模型: <span class="font-medium">{{ aiData.model }}</span>-->
+<!--          </span>&nbsp;-->
           <span class="text-xs px-2 py-1 rounded-md text-gray-600 dark:text-gray-300 bg-gray-200 dark:bg-gray-700">
             🤖 消耗Token: <span class="font-medium">{{ aiData.totalTokens }}</span>
           </span>&nbsp;
           <span class="text-xs px-2 py-1 rounded-md text-gray-600 dark:text-gray-300 bg-gray-200 dark:bg-gray-700">
-            🤖 提供方: <span class="font-medium">{{ aiData.from }}</span>
+            🤖 推荐人: <span class="font-medium">{{ aiData.from }}</span>
           </span>&nbsp;
           <span class="text-xs px-2 py-1 rounded-md text-gray-600 dark:text-gray-300 bg-gray-200 dark:bg-gray-700">
             🤖 更新频率: <span class="font-medium">每5分钟</span>
